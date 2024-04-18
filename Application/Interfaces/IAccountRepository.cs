@@ -13,5 +13,13 @@ namespace Application.Interfaces
     {
         Task<IdentityResult> AddUser(RegisterDto userDto);
         Task<Result<AppUser>> GetUserByEmail(string email);
+        Task UpdateUserAsync(AppUser user);
+        Task<bool> DeleteUserAsync(string email);
+
+        Task<Result<UserDto>> AddUserToRoleAsync(AppUser user, IdentityRole role);
+
+        Task<AppUser> GetUserByIdAsync(string userId);
+
+        Task<IdentityRole> GetRoleByNameAsync(string roleName);
     }
 }

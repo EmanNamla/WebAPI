@@ -12,5 +12,7 @@ namespace Domain.Entities.Identity
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public Status Status { get; set; }
     }
 }

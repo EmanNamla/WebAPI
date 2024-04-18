@@ -1,15 +1,25 @@
-﻿using Application.Features.AccountFeatures.Commands.ChangePassword;
+﻿using Application.Features.AccountFeatures.Commands.AddUserToRole;
+using Application.Features.AccountFeatures.Commands.ChangePassword;
+using Application.Features.AccountFeatures.Commands.DeleteUser;
 using Application.Features.AccountFeatures.Commands.LoginUser;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Application.Features.AccountFeatures.Commands.Roles.CreateRole;
 using Application.Features.AccountFeatures.Commands.Roles.DeleteRole;
 using Application.Features.AccountFeatures.Commands.Roles.UpdateRole;
+using Application.Features.AccountFeatures.Commands.UpdateUser;
 using Application.Features.AccountFeatures.Quaries.Roles.GetAllRoles;
 using Application.Features.AccountFeatures.Quaries.Roles.GetRoleById;
+using Application.Features.AccountFeatures.Quaries.Roles.GetUserByEmail;
+using Application.Interfaces;
+using Domain.DTOs;
+using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Presistence.Services;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -17,11 +27,16 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IMediator _mediator;
 
-        public AccountController(IMediator mediator)
+        private readonly IMediator _mediator;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly ITokenService _tokenService;
+
+        public AccountController(IMediator mediator, UserManager<AppUser> userManager,ITokenService tokenService)
         {
            _mediator = mediator;
+            _userManager = userManager;
+            _tokenService = tokenService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserCommand command)
@@ -71,6 +86,45 @@ namespace WebAPI.Controllers
         { 
 
             return Ok(await _mediator.Send(new GetRoleByIdQuary { Id = roleId }));
+        }
+
+        [HttpPut("UpdateUserStatus")]
+        public async Task<IActionResult> UpdateUserStatus(string email)
+        {
+
+            return Ok( await _mediator.Send(new ChangeUserStatusCommand { Email = email }));
+        }
+
+        [HttpPost("DeleteUser")]
+        public async Task<IActionResult> DeleteUser(string email)
+        {
+
+            return Ok(await _mediator.Send(new DeleteUserCommand { Email = email }));
+        }
+
+        [HttpPost("AddUserToRole")]
+        public async Task<IActionResult> AddUserToRole([FromBody] AddUserToRoleCommand command)
+        {
+
+            return Ok(await _mediator.Send(command));
+        }
+
+
+
+        [HttpPost("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+
+            return Ok(await _mediator.Send(new GetUserByEmailQuery { Email = email }));
+        }
+
+        [Authorize]
+        [HttpGet("CurrentUser")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(email);
+            return Ok(new UserDto { Email = user.Email, Token = await _tokenService.CreateTokenAsync(user, _userManager) });
         }
 
 

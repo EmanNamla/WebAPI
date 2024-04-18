@@ -1,7 +1,9 @@
-﻿using Application.Features.AccountFeatures.Commands.ChangePassword;
+﻿using Application.Features.AccountFeatures.Commands.AddUserToRole;
+using Application.Features.AccountFeatures.Commands.ChangePassword;
 using Application.Features.AccountFeatures.Commands.LoginUser;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Application.Interfaces;
+using Azure.Core;
 using Domain.DTOs;
 using Domain.Entities.Identity;
 using Mapster;
@@ -12,8 +14,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Presistence.Services
 {
@@ -35,7 +39,7 @@ namespace Presistence.Services
         }
 
 
-
+        #region Register
         public async Task<Result<UserDto>> RegisterUserAsync(RegisterUserCommand command)
         {
             var user = command.Adapt<RegisterDto>();
@@ -51,8 +55,10 @@ namespace Presistence.Services
                 Email = command.Email,
                 Token = await _tokenService.CreateTokenAsync(AppUser, _userManager)
             });
-        }
+        } 
+        #endregion
 
+        #region Login
         public async Task<Result<UserDto>> LoginUserAsync(LoginUserCommand command)
         {
             var userDto = command.Adapt<UserDto>();
@@ -76,9 +82,10 @@ namespace Presistence.Services
                 Email = command.Email,
                 Token = await _tokenService.CreateTokenAsync(appUser, _userManager)
             });
-        }
+        } 
+        #endregion
 
-
+        #region ChangePassword
         public async Task<Result<UserDto>> ChangePasswordAsync(ChangePasswordCommand command)
         {
             var getUserResult = await _accountRepository.GetUserByEmail(command.Email);
@@ -111,8 +118,10 @@ namespace Presistence.Services
             };
 
             return Result<UserDto>.Success(retuenUser, "Password changed successfully");
-        }
+        } 
+        #endregion
 
+        #region Roles
         public async Task<RoleDto> CreateRoleAsync(string roleName)
         {
             var role = new IdentityRole { Name = roleName };
@@ -141,7 +150,7 @@ namespace Presistence.Services
 
             if (!result.Succeeded)
             {
-               var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new Exception(errorMessage);
             }
             var returnRole = role.Adapt<RoleDto>();
@@ -190,5 +199,67 @@ namespace Presistence.Services
             var returnRoles = role.Adapt<RoleDto>();
             return returnRoles;
         }
+        #endregion
+
+        #region ChangeUserStatus
+        public async Task<Result<UserDto>> ChangeUserStatusAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+
+            if (user != null)
+            {
+                user.Status = user.Status == Status.Active ? Status.Inactive : Status.Active;
+
+                await _accountRepository.UpdateUserAsync(user);
+                var userDto = user.Adapt<UserDto>();
+                return Result<UserDto>.Success(new UserDto
+                {
+                    Email = user.Email,
+                    Token = await _tokenService.CreateTokenAsync(user, _userManager)
+                });
+            }
+            else
+            {
+                return Result<UserDto>.Failure("User not found.");
+            }
+        }
+
+
+        #endregion
+
+        #region  DeleteUser
+        public async Task<Result<string>> DeleteUserAsync(string email)
+        {
+            var isDeleted = await _accountRepository.DeleteUserAsync(email);
+            if (isDeleted)
+            {
+                return Result<string>.Success(null, "User deleted is successful");
+            }
+            else
+            {
+                return Result<string>.Failure("User not found or deleted failed");
+            }
+        }
+
+
+
+        #endregion
+
+
+        public async Task<UserDto> GetUserAndTokenByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var token = await _tokenService.CreateTokenAsync(user, _userManager);
+
+            return new UserDto { Email = user.Email, Token = token };
+        }
+        public async Task<AppUser> GetUserByEmail(string email)
+        {
+            var user = await _accountRepository.GetUserByEmail(email);
+            var userDto = user.Adapt<AppUser>();
+            return user != null ? new AppUser { Email = userDto.Email, FirstName = userDto.FirstName, LastName = userDto.LastName } : null;
+        }
+
     }
 }

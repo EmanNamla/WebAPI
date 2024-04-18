@@ -1,7 +1,9 @@
-﻿using Application.Features.AccountFeatures.Commands.ChangePassword;
+﻿using Application.Features.AccountFeatures.Commands.AddUserToRole;
+using Application.Features.AccountFeatures.Commands.ChangePassword;
 using Application.Features.AccountFeatures.Commands.LoginUser;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Domain.DTOs;
+using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace Application.Interfaces
 
         Task <Result<UserDto>> ChangePasswordAsync(ChangePasswordCommand command);
 
+        #region Roles
         Task<RoleDto> CreateRoleAsync(string roleName);
 
         Task<RoleDto> UpdateRoleAsync(string roleId, string newRoleName);
@@ -26,6 +29,15 @@ namespace Application.Interfaces
 
         Task<IEnumerable<RoleDto>> GetAllRolesAsync();
 
-        Task<RoleDto> GetRoleByIdAsync(string roleId);
+        Task<RoleDto> GetRoleByIdAsync(string roleId); 
+        #endregion
+
+        Task<Result<UserDto>> ChangeUserStatusAsync(string Email);
+
+        Task<Result<string>> DeleteUserAsync(string email);
+
+        Task<AppUser> GetUserByEmail(string email);
+        Task<UserDto> GetUserAndTokenByEmailAsync(string email);
+
     }
 }
