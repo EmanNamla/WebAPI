@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Service;
 using Domain.DTOs;
 using Domain.Entities.Identity;
 using MediatR;

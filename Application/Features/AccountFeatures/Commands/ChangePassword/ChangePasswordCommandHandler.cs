@@ -1,5 +1,4 @@
-﻿using Application.Features.AccountFeatures.Commands.LoginUser;
-using Application.Interfaces;
+﻿using Application.Interfaces.Service;
 using Domain.DTOs;
 using MediatR;
 using System;

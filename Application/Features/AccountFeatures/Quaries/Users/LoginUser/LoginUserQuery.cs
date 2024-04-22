@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.AccountFeatures.Commands.LoginUser
+namespace Application.Features.AccountFeatures.Quaries.Users.LoginUser
 {
-    public class LoginUserCommand: IRequest<Result<UserDto>>
+    public class LoginUserQuery : IRequest<Result<UserDto>>
     {
         public string Email { get; set; }
 

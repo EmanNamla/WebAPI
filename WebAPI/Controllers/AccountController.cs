@@ -1,7 +1,6 @@
 ﻿using Application.Features.AccountFeatures.Commands.AddUserToRole;
 using Application.Features.AccountFeatures.Commands.ChangePassword;
 using Application.Features.AccountFeatures.Commands.DeleteUser;
-using Application.Features.AccountFeatures.Commands.LoginUser;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Application.Features.AccountFeatures.Commands.Roles.CreateRole;
 using Application.Features.AccountFeatures.Commands.Roles.DeleteRole;
@@ -10,10 +9,14 @@ using Application.Features.AccountFeatures.Commands.UpdateUser;
 using Application.Features.AccountFeatures.Quaries.Roles.GetAllRoles;
 using Application.Features.AccountFeatures.Quaries.Roles.GetRoleById;
 using Application.Features.AccountFeatures.Quaries.Roles.GetUserByEmail;
+using Application.Features.AccountFeatures.Quaries.Users.GetCurrentUserQuery;
+using Application.Features.AccountFeatures.Quaries.Users.LoginUser;
 using Application.Interfaces;
 using Domain.DTOs;
 using Domain.Entities.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +49,7 @@ namespace WebAPI.Controllers
         }
  
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginUserCommand command)
+        public async Task<IActionResult> Login(LoginUserQuery command)
         {
             return Ok(await _mediator.Send(command));
         }
@@ -87,7 +90,7 @@ namespace WebAPI.Controllers
 
             return Ok(await _mediator.Send(new GetRoleByIdQuary { Id = roleId }));
         }
-
+        [Authorize]
         [HttpPut("UpdateUserStatus")]
         public async Task<IActionResult> UpdateUserStatus(string email)
         {
@@ -122,11 +125,10 @@ namespace WebAPI.Controllers
         [HttpGet("CurrentUser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            var user = await _userManager.FindByEmailAsync(email);
-            return Ok(new UserDto { Email = user.Email, Token = await _tokenService.CreateTokenAsync(user, _userManager) });
+            var query = new GetCurrentUserQuery(HttpContext.User);
+            var currentUser = await _mediator.Send(query);
+            return Ok(currentUser);
         }
-
 
     }
 }

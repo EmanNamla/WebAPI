@@ -1,5 +1,5 @@
 ﻿using Application.Features.AccountFeatures.Quaries.Roles.GetAllRoles;
-using Application.Interfaces;
+using Application.Interfaces.Service;
 using Domain.DTOs;
 using MediatR;
 using System;

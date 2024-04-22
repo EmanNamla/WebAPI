@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.Repository;
+using Application.Interfaces.Service;
 using Domain.Entities.Identity;
 using FluentValidation;
 using MediatR;
@@ -30,7 +32,7 @@ namespace Presistence
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(AppIdentityDbContext).Assembly.FullName));
             });
-           
+
 
             services.AddIdentity<AppUser, IdentityRole>()
                  .AddEntityFrameworkStores<AppIdentityDbContext>();
@@ -38,6 +40,11 @@ namespace Presistence
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
+
+
+
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
 
 
             services.AddScoped<ITokenService, TokenService>();
@@ -58,6 +65,12 @@ namespace Presistence
                   ValidateIssuerSigningKey = true,
                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
               });
+
+
+            services.AddAuthorization();
+
+
+
 
 
         }

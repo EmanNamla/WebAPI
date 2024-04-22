@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Repository;
 using Domain.DTOs;
 using Domain.Entities.Identity;
 using Mapster;

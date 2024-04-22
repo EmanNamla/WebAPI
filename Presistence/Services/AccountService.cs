@@ -1,14 +1,18 @@
 ﻿using Application.Features.AccountFeatures.Commands.AddUserToRole;
 using Application.Features.AccountFeatures.Commands.ChangePassword;
-using Application.Features.AccountFeatures.Commands.LoginUser;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
+using Application.Features.AccountFeatures.Quaries.Users.LoginUser;
 using Application.Interfaces;
+using Application.Interfaces.Repository;
+using Application.Interfaces.Service;
 using Azure.Core;
 using Domain.DTOs;
 using Domain.Entities.Identity;
 using Mapster;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using Presistence.Repositories;
 using System;
 using System.Collections.Generic;
@@ -28,14 +32,16 @@ namespace Presistence.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(IAccountRepository accountRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ITokenService tokenService, RoleManager<IdentityRole> roleManager)
+        public AccountService(IAccountRepository accountRepository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ITokenService tokenService, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
         {
             _accountRepository = accountRepository;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
             _roleManager = roleManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -49,7 +55,7 @@ namespace Presistence.Services
             {
                 return Result<UserDto>.Failure(registrationResult.Errors.FirstOrDefault()?.Description);
             }
-            var AppUser = registrationResult.Adapt<AppUser>();
+            var AppUser = user.Adapt<AppUser>();
             return Result<UserDto>.Success(new UserDto
             {
                 Email = command.Email,
@@ -59,7 +65,7 @@ namespace Presistence.Services
         #endregion
 
         #region Login
-        public async Task<Result<UserDto>> LoginUserAsync(LoginUserCommand command)
+        public async Task<Result<UserDto>> LoginUserAsync(LoginUserQuery command)
         {
             var userDto = command.Adapt<UserDto>();
 
@@ -77,6 +83,7 @@ namespace Presistence.Services
                 return Result<UserDto>.Failure("Invalid Email or Password");
             }
             var appUser = await _userManager.FindByEmailAsync(userDto.Email);
+
             return Result<UserDto>.Success(new UserDto
             {
                 Email = command.Email,
@@ -205,7 +212,7 @@ namespace Presistence.Services
         public async Task<Result<UserDto>> ChangeUserStatusAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-
+            var bearerToken = _httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (user != null)
             {
@@ -216,7 +223,7 @@ namespace Presistence.Services
                 return Result<UserDto>.Success(new UserDto
                 {
                     Email = user.Email,
-                    Token = await _tokenService.CreateTokenAsync(user, _userManager)
+                    Token = bearerToken
                 });
             }
             else
@@ -256,10 +263,25 @@ namespace Presistence.Services
         }
         public async Task<AppUser> GetUserByEmail(string email)
         {
-            var user = await _accountRepository.GetUserByEmail(email);
-            var userDto = user.Adapt<AppUser>();
-            return user != null ? new AppUser { Email = userDto.Email, FirstName = userDto.FirstName, LastName = userDto.LastName } : null;
+            var userResult = await _accountRepository.GetUserByEmail(email);
+
+            if (userResult.IsSuccess)
+            {
+                var userDto = userResult.Data;
+                return new AppUser
+                {
+                    Email = userDto.Email,
+                    FirstName = userDto.FirstName,
+                    LastName = userDto.LastName
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
+
+
 
     }
 }
