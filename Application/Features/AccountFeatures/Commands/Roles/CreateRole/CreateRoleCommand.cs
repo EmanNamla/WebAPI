@@ -1,4 +1,4 @@
-﻿using Domain.DTOs;
+﻿using Domain.DTOs.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;

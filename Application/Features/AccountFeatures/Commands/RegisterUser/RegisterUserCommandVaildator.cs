@@ -1,4 +1,4 @@
-﻿using Domain.DTOs;
+﻿using Domain.DTOs.Identity;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

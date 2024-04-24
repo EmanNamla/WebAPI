@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using MediatR;
 using System;

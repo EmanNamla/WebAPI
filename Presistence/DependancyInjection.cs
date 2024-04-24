@@ -47,6 +47,12 @@ namespace Presistence
             services.AddScoped<IAttachmentService, AttachmentService>();
 
 
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ICategoryService, CategoryService>();
+
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddAuthentication(options =>

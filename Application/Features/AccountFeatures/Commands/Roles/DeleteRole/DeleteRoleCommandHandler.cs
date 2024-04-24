@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Service;
-using Domain.DTOs;
+using Domain.DTOs.Identity;
 using MediatR;
 using System;
 using System.Collections.Generic;

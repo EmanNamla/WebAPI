@@ -24,7 +24,25 @@ namespace Presistence.Services
         }
 
 
- k
+        #region GetAllAttachments
+        public async Task<IEnumerable<AttachmentDto>> GetAllAttachmentsAsync()
+        {
+            var attachments = await _attachmentRepository.GetAllAsync();
+
+            var attachmentDtos = attachments.Select(attachment => new AttachmentDto
+            {
+                Id = attachment.Id,
+                Name = attachment.Name,
+                ContentType = attachment.ContentType,
+                Extension = attachment.Extension
+            });
+
+            return attachmentDtos;
+        }
+        #endregion
+
+
+        #region GetAttachmentById
         public async Task<AttachmentDto> GetAttachmentByIdAsync(int attachmentId)
         {
             var attachment = await _attachmentRepository.GetByIdAsync(attachmentId);
@@ -40,9 +58,8 @@ namespace Presistence.Services
                 ContentType = attachment.ContentType,
                 Extension = attachment.Extension
             };
-        }
-
-      
+        } 
+        #endregion
 
         #region DeleteAttachment
         public async Task<string> DeleteAttachmentAsync(int attachmentId)
@@ -57,8 +74,6 @@ namespace Presistence.Services
             return $"Attachment with ID {attachmentId} deleted successfully";
         } 
         #endregion
-
-
 
         #region UpdateAttachment
         public async Task<int> UpdateAttachmentAsync(int attachmentId, AttachmentDto attachmentDto)
@@ -116,9 +131,10 @@ namespace Presistence.Services
             await _attachmentRepository.AddAsync(attachment);
 
             return attachment.Id;
-        } 
+        }
         #endregion
 
+        #region staticMethosDeleteFileInwwwroot
         public static void DeleteFile(string fileName)
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
@@ -126,8 +142,9 @@ namespace Presistence.Services
             {
                 File.Delete(filePath);
             }
-        }
+        } 
+        #endregion
 
- 
+
     }
 }

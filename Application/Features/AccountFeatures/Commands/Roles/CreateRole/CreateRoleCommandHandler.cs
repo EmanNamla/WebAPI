@@ -1,7 +1,7 @@
 ﻿using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Application.Features.AccountFeatures.Commands.Role.UpdateRole;
 using Application.Interfaces.Service;
-using Domain.DTOs;
+using Domain.DTOs.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;

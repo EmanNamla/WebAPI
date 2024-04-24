@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Repository;
-using Domain.DTOs;
+using Domain.DTOs.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

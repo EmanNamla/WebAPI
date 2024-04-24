@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using System;

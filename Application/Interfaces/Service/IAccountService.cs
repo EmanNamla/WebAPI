@@ -3,6 +3,7 @@ using Application.Features.AccountFeatures.Commands.ChangePassword;
 using Application.Features.AccountFeatures.Commands.RegisterUser;
 using Application.Features.AccountFeatures.Quaries.Users.LoginUser;
 using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using System;

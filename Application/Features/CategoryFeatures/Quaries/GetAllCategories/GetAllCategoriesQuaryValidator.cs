@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.AccountFeatures.Quaries.Users.LoginUser
+namespace Application.Features.CategoryFeatures.Quaries.GetAllCategories
 {
-    public class LoginUserQuertValidation
+    internal class GetAllCategoriesQuaryValidator
     {
-
     }
 }

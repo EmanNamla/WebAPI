@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repository;
 using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using Mapster;
 using Microsoft.AspNetCore.Http;

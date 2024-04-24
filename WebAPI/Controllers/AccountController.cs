@@ -12,7 +12,7 @@ using Application.Features.AccountFeatures.Quaries.Roles.GetUserByEmail;
 using Application.Features.AccountFeatures.Quaries.Users.GetCurrentUserQuery;
 using Application.Features.AccountFeatures.Quaries.Users.LoginUser;
 using Application.Interfaces;
-using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;

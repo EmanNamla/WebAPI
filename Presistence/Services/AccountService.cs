@@ -7,6 +7,7 @@ using Application.Interfaces.Repository;
 using Application.Interfaces.Service;
 using Azure.Core;
 using Domain.DTOs;
+using Domain.DTOs.Identity;
 using Domain.Entities.Identity;
 using Mapster;
 using Microsoft.AspNetCore.Http;
