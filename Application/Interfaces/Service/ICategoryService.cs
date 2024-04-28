@@ -16,6 +16,6 @@ namespace Application.Interfaces.Service
         Task<CategoryDto> GetCategoryByIdAsync(int categoryId);
         Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
         Task<IEnumerable<CategoryDto>> SearchCategoriesByNameAsync(string name);
-        Task<string> ChangeCategoryStatusAsync(int categoryId);
+        Task ChangeCategoryStatusAsync(int categoryId);
     }
 }

@@ -53,19 +53,6 @@ namespace Presistence.Repositories
             return await _dbContext.Categories.Where(c => c.Name.Contains(name)).ToListAsync();
         }
 
-        public async Task<string> ChangeStatusAsync(int categoryId)
-        {
-            var category = await GetByIdAsync(categoryId);
-            if (category != null)
-            {
-                category.Status = category.Status == Status.Active ? Status.Inactive : Status.Active;
-                await _dbContext.SaveChangesAsync();
-                return "Status changed successfully.";
-            }
-            else
-            {
-                return "Category not found.";
-            }
-        }
+    
     }
 }

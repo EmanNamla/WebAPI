@@ -18,14 +18,10 @@ namespace Application.Features.CategoryFeatures.Commands.CreateCategory
             _categoryService = categoryService;
             RuleFor(x => x.Name).Cascade(CascadeMode.Stop).NotEmpty().NotNull()
                 .WithMessage("Name is required")
-                .MaximumLength(20);//.MustAsync(BeUnique);
+                .MaximumLength(20);
             RuleFor(x => x.Status).Cascade(CascadeMode.Stop).NotNull().NotEmpty();
            
         }
 
-        //private async Task<bool> BeUnique(string name, CancellationToken arg2)
-        //{
-        //    //_categoryService.GetCategoryByIdAsync()
-        //}
     }
 }

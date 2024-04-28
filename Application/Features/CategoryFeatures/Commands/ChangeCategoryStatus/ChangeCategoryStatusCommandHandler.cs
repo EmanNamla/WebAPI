@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CategoryFeatures.Commands.ChangeStatus
 {
-    public class ChangeCategoryStatusCommandHandler : IRequestHandler<ChangeCategoryStatusCommand, string>
+    public class ChangeCategoryStatusCommandHandler : IRequestHandler<ChangeCategoryStatusCommand, Unit>
     {
         private readonly ICategoryService _categoryService;
 
@@ -16,9 +16,10 @@ namespace Application.Features.CategoryFeatures.Commands.ChangeStatus
         {
             _categoryService = categoryService;
         }
-        public async Task<string> Handle(ChangeCategoryStatusCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ChangeCategoryStatusCommand command, CancellationToken cancellationToken)
         {
-          return await _categoryService.ChangeCategoryStatusAsync(command.CategoryId);
+           await _categoryService.ChangeCategoryStatusAsync(command.CategoryId);
+            return Unit.Value;
         }
     }
 }

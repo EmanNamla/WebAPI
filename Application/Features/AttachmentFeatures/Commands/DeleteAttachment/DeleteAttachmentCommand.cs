@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.AttachmentFeatures.Commands.DeleteAttachment
 {
-    public record DeleteAttachmentCommand : IRequest<string>
+    public record DeleteAttachmentCommand : IRequest<Unit>
     {
         public int Id { get; set; }
     }

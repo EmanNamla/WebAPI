@@ -15,5 +15,7 @@ namespace Application.Interfaces.Service
         Task<IEnumerable<ProductDto>> SearchProductByNameAsync(string name);
         Task<ProductDto> GetProductByIdAsync(int productId);
         Task<IEnumerable<ProductDto>> GetAllProductsAsync();
+
+        Task ChangeProductStatusAsync(int productId);
     }
 }

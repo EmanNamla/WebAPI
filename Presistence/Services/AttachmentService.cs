@@ -62,16 +62,13 @@ namespace Presistence.Services
         #endregion
 
         #region DeleteAttachment
-        public async Task<string> DeleteAttachmentAsync(int attachmentId)
+        public async Task DeleteAttachmentAsync(int attachmentId)
         {
             var attachment = await _attachmentRepository.GetByIdAsync(attachmentId);
-            if (attachment == null)
-            {
-                throw new InvalidOperationException($"Attachment with ID {attachmentId} not found");
-            }
+          
             DeleteFile(attachment.Name);
             await _attachmentRepository.DeleteAsync(attachment);
-            return $"Attachment with ID {attachmentId} deleted successfully";
+           
         } 
         #endregion
 

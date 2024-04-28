@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Entities.Identity;
 using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Presistence.Repositories;
 using System;
 using System.Collections.Generic;
@@ -33,9 +34,11 @@ namespace Presistence.Services
             return Returncategory;
         }
 
-        public async Task<string> ChangeCategoryStatusAsync(int categoryId)
+        public async Task ChangeCategoryStatusAsync(int categoryId)
         {
-          return   await _categoryRepository.ChangeStatusAsync(categoryId);
+                var category = await _categoryRepository.GetByIdAsync(categoryId);
+                    category.Status = category.Status == Status.Active ? Status.Inactive : Status.Active;
+                    await _categoryRepository.UpdateAsync(category);
         }
 
         public async Task DeleteCategoryAsync(int categoryId)

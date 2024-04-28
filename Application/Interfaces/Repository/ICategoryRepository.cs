@@ -18,6 +18,6 @@ namespace Application.Interfaces.Repository
         Task<Category> GetByIdAsync(int id);
         Task<IEnumerable<Category>> GetAllAsync();
         Task<IEnumerable<Category>> SearchByNameAsync(string name);
-        Task<string> ChangeStatusAsync(int categoryId);
+    
     }
 }

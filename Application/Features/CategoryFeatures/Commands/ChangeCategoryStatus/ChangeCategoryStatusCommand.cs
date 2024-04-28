@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CategoryFeatures.Commands.ChangeStatus
 {
-    public class ChangeCategoryStatusCommand:IRequest<string>
+    public record ChangeCategoryStatusCommand:IRequest<Unit>
     {
         public int CategoryId { get; set; }
     }

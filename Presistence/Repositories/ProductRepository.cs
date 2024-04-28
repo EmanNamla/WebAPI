@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repository;
 using Domain.Entities;
+using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Context;
 using System;
@@ -49,5 +50,7 @@ namespace Presistence.Repositories
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();
         }
+
+      
     }
 }

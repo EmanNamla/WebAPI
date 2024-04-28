@@ -17,5 +17,7 @@ namespace Application.Interfaces.Repository
         Task<IEnumerable<Product>> SearchByNameAsync(string name);
         Task<Product> GetByIdAsync(int id);
         Task<IEnumerable<Product>> GetAllAsync();
+
+       // Task<string> ChangeStatusAsync(int productId);
     }
 }

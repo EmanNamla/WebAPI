@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace Application.Features.AttachmentFeatures.Commands.DeleteAttachment
 {
-    public record DeleteAttachmentHandler : IRequestHandler<DeleteAttachmentCommand, string>
+    public record DeleteAttachmentCommandHandler : IRequestHandler<DeleteAttachmentCommand, Unit>
     {
         private readonly IAttachmentService _attachmentService;
 
-        public DeleteAttachmentHandler(IAttachmentService attachmentService)
+        public DeleteAttachmentCommandHandler(IAttachmentService attachmentService)
         {
             _attachmentService = attachmentService;
         }
-        public async Task<string> Handle(DeleteAttachmentCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteAttachmentCommand command, CancellationToken cancellationToken)
         {
-            return await _attachmentService.DeleteAttachmentAsync(command.Id);
+             await _attachmentService.DeleteAttachmentAsync(command.Id);
+            return Unit.Value;
         }
     }
 }

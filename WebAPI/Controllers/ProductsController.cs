@@ -1,8 +1,10 @@
 ﻿using Application.Features.AttachmentFeatures.Commands.UploadAttachment;
+using Application.Features.CategoryFeatures.Commands.ChangeStatus;
 using Application.Features.CategoryFeatures.Commands.DeleteCategory;
 using Application.Features.CategoryFeatures.Quaries.GetAllCategories;
 using Application.Features.CategoryFeatures.Quaries.GetCategoryById;
 using Application.Features.CategoryFeatures.Quaries.SearchCategoriesByName;
+using Application.Features.ProductFeatures.Commands.ChangeProductStatus;
 using Application.Features.ProductFeatures.Commands.CreateProduct;
 using Application.Features.ProductFeatures.Commands.DeleteProduct;
 using Application.Features.ProductFeatures.Commands.UpdateProduct;
@@ -59,6 +61,11 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> SearchProductsByName(string productName)
         {
             return Ok(await _mediator.Send(new SearchProductByNameQuary(productName)));
+        }
+        [HttpPost("ChangeProductStatus/{id}")]
+        public async Task<IActionResult> ChangeCategoryStatus(int id)
+        {
+            return Ok(await _mediator.Send(new ChangeProductStatusCommand  (  id )));
         }
     }
 }

@@ -76,5 +76,12 @@ namespace Presistence.Services
 
             return returnProduct;
         }
+
+        public async Task  ChangeProductStatusAsync(int productId)
+        {
+              var product = await _productRepository.GetByIdAsync(productId);
+                    product.Status = product.Status == Status.Active ? Status.Inactive : Status.Active;
+                    await _productRepository.UpdateAsync(product);
+        }
     }
 }

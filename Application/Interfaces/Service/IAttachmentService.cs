@@ -13,7 +13,7 @@ namespace Application.Interfaces.Service
     {
         Task<int> UploadAttachmentAsync(AttachmentDto attachmentDto);
         Task<int> UpdateAttachmentAsync(int attachmentId, AttachmentDto attachmentDto);
-        Task<string> DeleteAttachmentAsync(int attachmentId);
+        Task DeleteAttachmentAsync(int attachmentId);
         Task<AttachmentDto> GetAttachmentByIdAsync(int attachmentId);
         Task<IEnumerable<AttachmentDto>> GetAllAttachmentsAsync();
 
