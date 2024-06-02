@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.Identity;
+using Domain.Entities.Shared;
 
 namespace Domain.Entities
 {
-    public class Attachment
+    public class Attachment: EntityBase
     {
         public int Id { get; set; }
 
@@ -20,5 +21,7 @@ namespace Domain.Entities
         public AppUser? AppUser { get; set; }
 
         public Product? Product { get; set; }
+
+        public int AttachmentGroupId { get; set; }
     }
 }
