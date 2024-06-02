@@ -43,8 +43,8 @@ namespace Presistence
 
 
 
-            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
-            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IAttachmentGroupRepository, AttachmentGroupRepository>();
+            services.AddScoped<IAttachmentGroupService, AttachmentGroupService>();
 
 
             services.AddTransient<IProductRepository, ProductRepository>();

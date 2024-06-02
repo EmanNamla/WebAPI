@@ -11,9 +11,9 @@ namespace Application.Features.AttachmentFeatures.Commands.DeleteAttachment
 {
     public record DeleteAttachmentCommandHandler : IRequestHandler<DeleteAttachmentCommand, Unit>
     {
-        private readonly IAttachmentService _attachmentService;
+        private readonly IAttachmentGroupService _attachmentService;
 
-        public DeleteAttachmentCommandHandler(IAttachmentService attachmentService)
+        public DeleteAttachmentCommandHandler(IAttachmentGroupService attachmentService)
         {
             _attachmentService = attachmentService;
         }

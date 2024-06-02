@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.Service;
+﻿using Application.Interfaces.Repository;
+using Application.Interfaces.Service;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,15 +12,19 @@ namespace Application.Features.ProductFeatures.Commands.ChangeProductStatus
 {
     public class ChangeProductStatusCommandHandler : IRequestHandler<ChangeProductStatusCommand, Unit>
     {
-        private readonly IProductService _productService;
+        private readonly IProductRepository _productRepository;
 
-        public ChangeProductStatusCommandHandler(IProductService productService)
+        public ChangeProductStatusCommandHandler(IProductRepository productRepository)
         {
-           _productService = productService;
+            _productRepository = productRepository;
         }
+
         public async Task<Unit> Handle(ChangeProductStatusCommand command, CancellationToken cancellationToken)
         {
-            await _productService.ChangeProductStatusAsync(command.productId);
+            var product = await _productRepository.GetByIdAsync(command.productId);
+            product.ChangeStatus();
+            await _productRepository.UpdateAsync(product);
+
             return Unit.Value;
         }
     }

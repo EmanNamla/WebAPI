@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Shared
 {
-    class EntityBase
+   public class EntityBase
     {
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public string CreatedBy { get; set; } = "222";
+        public DateTime CreatedDate { get; set; }= DateTime.Now;
 
-        public string ModifyBy { get; set; }
-        public DateTime ModifyDate { get; set; }
+        public string ModifyBy { get; set; } = "222";
+        public DateTime ModifyDate { get; set; } = DateTime.Now;
 
     }
 }

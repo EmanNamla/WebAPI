@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Identity;
+﻿using Domain.DTOs;
+using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,26 @@ namespace Domain.Entities
 
         public Category Category { get; set; }
 
-        public int? AttachmentId { get; set; }
+        public int AttachmentGroupId { get; set; }
 
-        public Attachment Attachment { get; set; }
+        public virtual AttachmentGroup  AttachmentGroup { get; set; }
 
-       
+        public Product(ProductDto productDto)
+        {
+
+
+        }
+
+        void HandleAddUpdateSubItems()
+        {
+
+        }
+
+        public void ChangeStatus()
+        {
+            Status = Status == Status.Active ? Status.Inactive : Status.Active;
+        }
+
+
     }
 }

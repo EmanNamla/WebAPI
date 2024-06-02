@@ -11,9 +11,9 @@ namespace Application.Features.AttachmentFeatures.Commands.DeleteAttachment
 {
     public class DeleteAttachmentCommandValidator:AbstractValidator<DeleteAttachmentCommand>
     {
-        private readonly IAttachmentService _attachmentService;
+        private readonly IAttachmentGroupService _attachmentService;
 
-        public DeleteAttachmentCommandValidator(IAttachmentService attachmentService)
+        public DeleteAttachmentCommandValidator(IAttachmentGroupService attachmentService)
         {
             _attachmentService = attachmentService;
             RuleLevelCascadeMode = CascadeMode.Stop;

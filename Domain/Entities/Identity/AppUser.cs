@@ -15,9 +15,9 @@ namespace Domain.Entities.Identity
 
         public DateTime Birthdate { get; set; }
 
-        public int? AttachmentId { get; set; }
+        public int? attachmentGroupId { get; set; }
 
-        public Attachment Attachment { get; set; }
+        public AttachmentGroup attachmentGroup { get; set; }
         public Status Status { get; set; }
     }
 }

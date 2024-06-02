@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    class AttachmentGroup: EntityBase
+   public class AttachmentGroup: EntityBase
     {
         public int Id { get; set; }
 

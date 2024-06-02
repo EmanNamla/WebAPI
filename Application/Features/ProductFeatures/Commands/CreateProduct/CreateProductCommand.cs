@@ -15,12 +15,10 @@ namespace Application.Features.ProductFeatures.Commands.CreateProduct
 
         public string Name { get; set; }
 
-        public string Status { get; set; }
+        public Status Status { get; set; }
         public int Quantity { get; set; }
 
         public int CategoryId { get; set; }
-
-        public int? AttachmentId { get; set; }
 
     }
 }

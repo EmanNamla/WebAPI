@@ -12,9 +12,9 @@ namespace Application.Features.AttachmentFeatures.Quaries.GetAttachmentById
 {
     public class GetAttachmentByIdQuaryHandler : IRequestHandler<GetAttachmentByIdQuary, AttachmentDto>
     {
-        private readonly IAttachmentService _attachmentService;
+        private readonly IAttachmentGroupService _attachmentService;
 
-        public GetAttachmentByIdQuaryHandler(IAttachmentService attachmentService)
+        public GetAttachmentByIdQuaryHandler(IAttachmentGroupService attachmentService)
         {
             _attachmentService = attachmentService;
         }

@@ -37,6 +37,7 @@ namespace Presistence.Repositories
                 LastName = userDto.LastName,
                 UserName = userDto.Email.Split('@')[0],
                 Email = userDto.Email,
+                attachmentGroup = new Domain.Entities.AttachmentGroup()
             };
             var result = await _userManager.CreateAsync(user, userDto.Password);
             return result;

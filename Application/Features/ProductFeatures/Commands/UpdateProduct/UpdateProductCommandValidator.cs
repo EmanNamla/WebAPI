@@ -28,10 +28,6 @@ namespace Application.Features.ProductFeatures.Commands.UpdateProduct
                .NotNull().WithMessage("ProductName id not Null");
 
 
-            RuleFor(x => x.ProductDto.AttachmentId)
-               .NotEmpty().WithMessage("Attachment id not emtpy")
-               .NotNull().WithMessage("Attachment id not Null");
-
         }
 
         private async Task<bool> BeExist(int ProductId, CancellationToken arg2)

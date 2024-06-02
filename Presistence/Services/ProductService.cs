@@ -24,7 +24,8 @@ namespace Presistence.Services
         public async Task<ProductDto> AddProductAsync(ProductDto productDto)
         {
             var product = productDto.Adapt<Product>();
-
+            product.AttachmentGroup = new AttachmentGroup();
+            product.ChangeStatus();
             await _productRepository.AddAsync(product);
 
             return product.Adapt<ProductDto>();
@@ -65,10 +66,9 @@ namespace Presistence.Services
             var product = await _productRepository.GetByIdAsync(productId);
 
             product.Name = productDto.Name;
-            product.Status = Enum.Parse<Status>(productDto.Status, true);
+            product.Status = productDto.Status;
             product.Quantity = productDto.Quantity;
             product.CategoryId = productDto.CategoryId;
-            product.AttachmentId = productDto.AttachmentId;
 
             await _productRepository.UpdateAsync(product);
 
@@ -80,7 +80,7 @@ namespace Presistence.Services
         public async Task  ChangeProductStatusAsync(int productId)
         {
               var product = await _productRepository.GetByIdAsync(productId);
-                    product.Status = product.Status == Status.Active ? Status.Inactive : Status.Active;
+            product.ChangeStatus();
                     await _productRepository.UpdateAsync(product);
         }
     }

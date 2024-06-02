@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Presistence.Context;
 
@@ -11,9 +12,11 @@ using Presistence.Context;
 namespace Presistence.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240602121054_AddAttachmentGroupIdInTbUser")]
+    partial class AddAttachmentGroupIdInTbUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,16 +65,11 @@ namespace Presistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
                     b.HasIndex("AttachmentGroupId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Attachments");
                 });
@@ -215,7 +213,7 @@ namespace Presistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AttachmentGroupId")
+                    b.Property<int?>("AttachmentId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -236,7 +234,9 @@ namespace Presistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttachmentGroupId");
+                    b.HasIndex("AttachmentId")
+                        .IsUnique()
+                        .HasFilter("[AttachmentId] IS NOT NULL");
 
                     b.HasIndex("CategoryId")
                         .IsUnique();
@@ -389,13 +389,7 @@ namespace Presistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("AppUser");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.AppUser", b =>
@@ -409,11 +403,9 @@ namespace Presistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
-                    b.HasOne("Domain.Entities.AttachmentGroup", "AttachmentGroup")
-                        .WithMany()
-                        .HasForeignKey("AttachmentGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Domain.Entities.Attachment", "Attachment")
+                        .WithOne("Product")
+                        .HasForeignKey("Domain.Entities.Product", "AttachmentId");
 
                     b.HasOne("Domain.Entities.Category", "Category")
                         .WithOne("Product")
@@ -421,7 +413,7 @@ namespace Presistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AttachmentGroup");
+                    b.Navigation("Attachment");
 
                     b.Navigation("Category");
                 });
@@ -475,6 +467,11 @@ namespace Presistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Attachment", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.AttachmentGroup", b =>

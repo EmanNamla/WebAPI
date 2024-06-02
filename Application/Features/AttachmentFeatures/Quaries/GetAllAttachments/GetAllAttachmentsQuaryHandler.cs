@@ -11,9 +11,9 @@ namespace Application.Features.AttachmentFeatures.Quaries.GetAllAttachments
 {
     public class GetAllAttachmentsQuaryHandler : IRequestHandler<GetAllAttachmentsQuary,IEnumerable<AttachmentDto>>
     {
-        private readonly IAttachmentService _attachmentService;
+        private readonly IAttachmentGroupService _attachmentService;
 
-        public GetAllAttachmentsQuaryHandler(IAttachmentService attachmentService)
+        public GetAllAttachmentsQuaryHandler(IAttachmentGroupService attachmentService)
         {
             _attachmentService = attachmentService;
         }

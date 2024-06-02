@@ -14,9 +14,9 @@ namespace Application.Features.AttachmentFeatures.Commands.UploadAttachment
 {
     public class UploadAttachmentCommandHandler : IRequestHandler<UploadAttachmentCommand, int>
     {
-        private readonly IAttachmentService _attachmentService;
+        private readonly IAttachmentGroupService _attachmentService;
 
-        public UploadAttachmentCommandHandler(IAttachmentService attachmentService)
+        public UploadAttachmentCommandHandler(IAttachmentGroupService attachmentService)
         {
             _attachmentService = attachmentService;
         }

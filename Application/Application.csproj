@@ -21,9 +21,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\AttachmentGroupFeatures\Commands\" />
-    <Folder Include="Features\AttachmentGroupFeatures\Quaries\" />
-  </ItemGroup>
-
 </Project>
