@@ -21,5 +21,18 @@ namespace Application.Interfaces.Repository
         Task<Attachment> GetByAttachmentGroupIdAsync(int id);
         Task<IEnumerable<Attachment>> DeleteAttachement();
 
+        /// <summary>
+        /// /////////
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="attachmentId"></param>
+        /// <returns></returns>
+
+        Task<List<Attachment>> GetAttachmentByAttachmentGroupIdAsync(int groupId);
+        Task<AttachmentGroup> GetAttachmentGroupByGroupId(int id);
+
+        Task SaveAttachmentAsync(int groupId, Attachment attachment);
+        Task DeleteAttachmentAsync(int groupId, int attachmentId);
+
     }
 }

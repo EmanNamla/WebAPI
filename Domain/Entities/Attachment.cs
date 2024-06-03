@@ -18,10 +18,8 @@ namespace Domain.Entities
 
         public string Extension { get; set; }
 
-        public AppUser? AppUser { get; set; }
-
-        public Product? Product { get; set; }
-
         public int AttachmentGroupId { get; set; }
+
+        public AttachmentGroup? attachmentGroup { get; set; }
     }
 }

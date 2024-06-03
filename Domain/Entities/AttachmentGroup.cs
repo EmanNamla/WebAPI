@@ -12,5 +12,7 @@ namespace Domain.Entities
         public int Id { get; set; }
 
         public List<Attachment> Attachments { get; set; }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Domain.DTOs;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -20,5 +21,15 @@ namespace Application.Interfaces.Service
         Task<AttachmentDto> GetAttachmentByGroupId(int attachmentGroupId);
 
         Task DeleteAttachmentByGroupIdAsync(int groupId);
+
+        /// <summary>
+        /// ////////////////////
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        Task<Attachment> UploadAttachmentAsync(int groupId, IFormFile file);
+        Task DeleteAttachmentAsync(int groupId, int attachmentId);
+        Task<Attachment> GetAttachmentByAttachmentGroupIdAsync(int groupId, int attachmentId);
     }
 }

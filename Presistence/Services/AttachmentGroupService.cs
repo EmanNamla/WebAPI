@@ -3,25 +3,113 @@ using Application.Interfaces.Service;
 using Domain.DTOs;
 using Domain.Entities;
 using Mapster;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Presistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using Domain.Entities;
 using System.Text;
 using System.Threading.Tasks;
+using Attachment = Domain.Entities.Attachment;
 
 namespace Presistence.Services
 {
     public class AttachmentGroupService:IAttachmentGroupService
     {
-        private readonly IAttachmentGroupRepository _attachmentRepository;
+        private readonly IAttachmentGroupRepository _attachmentGroupRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IWebHostEnvironment _environment;
 
-        public AttachmentGroupService(IAttachmentGroupRepository attachmentRepository)
+        public AttachmentGroupService(IAttachmentGroupRepository attachmentGroupRepository,IAttachmentRepository attachmentRepository, IWebHostEnvironment environment)
         {
-           _attachmentRepository = attachmentRepository;
+            _attachmentGroupRepository = attachmentGroupRepository;
+            _attachmentRepository = attachmentRepository;
+            _environment = environment;
         }
+
+        //public async Task<Attachment> GetAttachmentByAttachmentGroupIdAsync(int groupId, int attachmentId)
+        //{
+        //    return await Attachment;
+        //}
+
+        public async Task<Attachment> UploadAttachmentAsync(int groupId, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("File is null or empty", nameof(file));
+            }
+
+            var uploadsFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolderPath))
+            {
+                Directory.CreateDirectory(uploadsFolderPath);
+            }
+
+            var fileExtension = Path.GetExtension(file.FileName);
+            var fileName = $"{Guid.NewGuid()}{fileExtension}";
+            var filePath = Path.Combine(uploadsFolderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var attachment = new Attachment
+            {
+                Name = fileName,
+                ContentType = file.ContentType,
+                Extension = fileExtension,
+                AttachmentGroupId = groupId
+            };
+
+            await _attachmentGroupRepository.SaveAttachmentAsync(groupId, attachment);
+
+            return attachment;
+        }
+
+        public async Task DeleteAttachmentAsync(int groupId, int attachmentId)
+        {
+            var attachmentGroup = await _attachmentGroupRepository.GetAttachmentGroupByGroupId(groupId);
+
+            var attachment = attachmentGroup.Attachments.FirstOrDefault(a => a.Id == attachmentId);
+            if (attachment == null)
+            {
+                throw new KeyNotFoundException("Attachment not found");
+            }
+
+            var uploadsFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+            var filePath = Path.Combine(uploadsFolderPath, attachment.Name);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            await _attachmentGroupRepository.DeleteAttachmentAsync(groupId, attachmentId);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ///////////////////////////////
+
+
 
 
         #region GetAllAttachments
@@ -58,18 +146,18 @@ namespace Presistence.Services
                 ContentType = attachment.ContentType,
                 Extension = attachment.Extension
             };
-        } 
+        }
         #endregion
 
         #region DeleteAttachment
         public async Task DeleteAttachmentAsync(int attachmentId)
         {
             var attachment = await _attachmentRepository.GetByIdAsync(attachmentId);
-          
+
             DeleteFile(attachment.Name);
             await _attachmentRepository.DeleteAsync(attachment);
-           
-        } 
+
+        }
         #endregion
 
         #region UpdateAttachment
@@ -100,7 +188,7 @@ namespace Presistence.Services
             await _attachmentRepository.UpdateAsync(attachment);
 
             return attachmentId;
-        } 
+        }
         #endregion
 
 
@@ -153,6 +241,9 @@ namespace Presistence.Services
             throw new NotImplementedException();
         }
 
-
+        public Task<Attachment> GetAttachmentByAttachmentGroupIdAsync(int groupId, int attachmentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

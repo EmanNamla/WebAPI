@@ -27,17 +27,6 @@ namespace Domain.Entities
 
         public virtual AttachmentGroup  AttachmentGroup { get; set; }
 
-        public Product(ProductDto productDto)
-        {
-
-
-        }
-
-        void HandleAddUpdateSubItems()
-        {
-
-        }
-
         public void ChangeStatus()
         {
             Status = Status == Status.Active ? Status.Inactive : Status.Active;
