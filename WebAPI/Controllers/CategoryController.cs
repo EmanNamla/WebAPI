@@ -1,4 +1,4 @@
-﻿using Application.Features.AttachmentFeatures.Quaries.GetAttachmentById;
+﻿
 using Application.Features.CategoryFeatures.Commands.ChangeStatus;
 using Application.Features.CategoryFeatures.Commands.CreateCategory;
 using Application.Features.CategoryFeatures.Commands.DeleteCategory;

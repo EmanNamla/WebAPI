@@ -29,8 +29,8 @@ namespace Presistence.Repositories
 
             if (attachmentGroup == null)
             {
-                attachmentGroup = new AttachmentGroup(); 
-               
+                attachmentGroup = new AttachmentGroup();
+
             }
 
             return attachmentGroup;
@@ -84,22 +84,30 @@ namespace Presistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAttachmentAsync(int groupId, int attachmentId)
+
+        public async Task DeleteAttachmentByAttachmentIdAsync(int attachmentId)
         {
-            var attachmentGroup = await GetAttachmentGroupWithAttachmentsAsync(groupId);
-
-            if (attachmentGroup == null)
-            {
-                throw new KeyNotFoundException("AttachmentGroup not found");
-            }
-
-            var attachment = attachmentGroup.Attachments.FirstOrDefault(a => a.Id == attachmentId);
+            var attachment = await _dbContext.Attachments.FindAsync(attachmentId);
             if (attachment != null)
             {
-                attachmentGroup.Attachments.Remove(attachment);
+                _dbContext.Attachments.Remove(attachment);
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteAttachmentsByGroupIdAsync(int groupId)
+        {
+            var attachmentGroup = await _dbContext.AttachmentGroups
+                .Include(ag => ag.Attachments)
+                .FirstOrDefaultAsync(ag => ag.Id == groupId);
+
+            if (attachmentGroup != null)
+            {
+                _dbContext.Attachments.RemoveRange(attachmentGroup.Attachments);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
 
         public async Task<AttachmentGroup> GetAttachmentGroupByGroupId(int id)
         {
@@ -109,72 +117,9 @@ namespace Presistence.Repositories
             return attachmentGroup;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        ////////////////////////
-
-
-        public async Task AddAsync(Attachment attachment)
-        {
-            _dbContext.Attachments.Add(attachment);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(Attachment attachment)
-        {
-            _dbContext.Attachments.Remove(attachment);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public Task<IEnumerable<Attachment>> DeleteAttachement()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Attachment>> GetAllAsync()
-        {
-            return await _dbContext.Attachments.ToListAsync();
-        }
-
-        public Task<Attachment> GetByAttachmentGroupIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Attachment> GetByIdAsync(int id)
+        public async Task<Attachment> GetAttachmentByAttachmentIdAsync(int id)
         {
             return await _dbContext.Attachments.FindAsync(id);
-        }
-
-        public async Task UpdateAsync(Attachment attachment)
-        {
-            _dbContext.Attachments.Update(attachment);
-            await _dbContext.SaveChangesAsync();
         }
 
        
